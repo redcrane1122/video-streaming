@@ -108,6 +108,10 @@ class VideoStreamingServer {
         port: 8000,
         allow_origin: "*",
       },
+      relay: {
+        ffmpeg: process.env.FFMPEG_PATH || 'ffmpeg',
+        tasks: []
+      }
     };
 
     this.nms = new NodeMediaServer(rtmpConfig);
@@ -117,6 +121,8 @@ class VideoStreamingServer {
         "[NodeEvent on preConnect]",
         `id=${id} args=${JSON.stringify(args)}`
       );
+      // Accept all connections for now
+      return true;
     });
 
     this.nms.on("postConnect", (id, args) => {
@@ -144,6 +150,9 @@ class VideoStreamingServer {
       if (streamName) {
         this.createStream(streamName, id);
       }
+      
+      // Accept all publish requests
+      return true;
     });
 
     this.nms.on("postPublish", (id, StreamPath, args) => {
