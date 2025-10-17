@@ -1,5 +1,8 @@
 const NodeMediaServer = require('node-media-server');
 
+console.log('🧪 Detailed RTMP Test Server');
+console.log('============================');
+
 // Simple RTMP server for testing
 const config = {
   rtmp: {
@@ -18,36 +21,63 @@ const config = {
 const nms = new NodeMediaServer(config);
 
 nms.on('preConnect', (id, args) => {
-  console.log('[NodeEvent on preConnect]', `id=${id} args=${JSON.stringify(args)}`);
+  console.log('🔗 [CONNECT ATTEMPT]');
+  console.log('   ID:', id);
+  console.log('   Args:', JSON.stringify(args, null, 2));
+  console.log('   Time:', new Date().toISOString());
   return true;
 });
 
 nms.on('postConnect', (id, args) => {
-  console.log('[NodeEvent on postConnect]', `id=${id} args=${JSON.stringify(args)}`);
+  console.log('✅ [CONNECTED SUCCESSFULLY]');
+  console.log('   ID:', id);
+  console.log('   Args:', JSON.stringify(args, null, 2));
+  console.log('   Time:', new Date().toISOString());
 });
 
 nms.on('doneConnect', (id, args) => {
-  console.log('[NodeEvent on doneConnect]', `id=${id} args=${JSON.stringify(args)}`);
+  console.log('❌ [DISCONNECTED]');
+  console.log('   ID:', id);
+  console.log('   Args:', JSON.stringify(args, null, 2));
+  console.log('   Time:', new Date().toISOString());
 });
 
 nms.on('prePublish', (id, StreamPath, args) => {
-  console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  console.log('📡 [PUBLISH ATTEMPT]');
+  console.log('   ID:', id);
+  console.log('   Stream Path:', StreamPath);
+  console.log('   Args:', JSON.stringify(args, null, 2));
+  console.log('   Time:', new Date().toISOString());
   return true;
 });
 
 nms.on('postPublish', (id, StreamPath, args) => {
-  console.log('[NodeEvent on postPublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  console.log('✅ [STREAM PUBLISHED]');
+  console.log('   ID:', id);
+  console.log('   Stream Path:', StreamPath);
+  console.log('   Args:', JSON.stringify(args, null, 2));
+  console.log('   Time:', new Date().toISOString());
 });
 
 nms.on('donePublish', (id, StreamPath, args) => {
-  console.log('[NodeEvent on donePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  console.log('⏹️ [STREAM STOPPED]');
+  console.log('   ID:', id);
+  console.log('   Stream Path:', StreamPath);
+  console.log('   Args:', JSON.stringify(args, null, 2));
+  console.log('   Time:', new Date().toISOString());
 });
 
 nms.run();
 
-console.log('🧪 Test RTMP Server running on port 1935');
-console.log('📡 Test with OBS: rtmp://localhost:1935/live/test');
-console.log('Press Ctrl+C to stop');
+console.log('✅ Test RTMP Server running on port 1935');
+console.log('📡 Ready for OBS connection');
+console.log('\n🔧 OBS Studio Settings to try:');
+console.log('   Option 1: Server: rtmp://localhost:1935/live, Key: test');
+console.log('   Option 2: Server: rtmp://127.0.0.1:1935/live, Key: test');
+console.log('   Option 3: Server: rtmp://localhost:1935, Key: live/test');
+console.log('\n⏳ Waiting for OBS connection...');
+console.log('   (Click "Start Streaming" in OBS now)');
+console.log('\nPress Ctrl+C to stop');
 
 process.on('SIGINT', () => {
   console.log('\n🛑 Shutting down test server...');
